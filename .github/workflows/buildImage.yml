@@ -19,7 +19,7 @@ jobs:
         run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
       - name: Build the docker image
-        run: docker build . --file Dockerfile --tag leobozcaitano/react-frontend
+        run: docker build .
 
       - name: Push the docker image
         run: docker push ${{secrets.DOCKER_USER}}/react-frontend
