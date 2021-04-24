@@ -1,0 +1,25 @@
+name: Docker image CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: docker hub login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+      - name: Build the docker image
+        run: docker build . --file Dockerfile --tag leobozcaitano/react-frontend
+
+      - name: Push the docker image
+        run: docker push ${{secrets.DOCKER_USER}}/react-frontend
