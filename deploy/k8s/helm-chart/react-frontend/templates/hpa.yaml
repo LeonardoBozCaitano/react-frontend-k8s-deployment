@@ -1,0 +1,28 @@
+{{- if .Values.hpa.enabled }}
+  {{- $fullName := include "react-frontend.fullname" . -}}
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v1
+metadata:
+  name: {{ $fullName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: {{ $fullName }}
+    apiVersion: "extensions/v1beta1"
+  minReplicas: {{ .Values.hpa.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.hpa.autoscaling.maxReplicas }}
+  metrics:
+{{- with .Values.hpa.autoscaling.targetCPUUtilizationPercentage }}
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: {{ . }}
+{{- end }}
+{{- with .Values.hpa.autoscaling.targetMemoryUtilizationPercentage }}
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: {{ . }}
+{{- end }}
+{{- end }}
