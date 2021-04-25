@@ -1,3 +1,7 @@
+# Simple React app with github actions deploy implemented
+
+This project has an action configured to push a new image do docker hub, and it will use this image to deploy to my single node kubernetes, that i create with terraform on https://github.com/LeonardoBozCaitano/terraform-singlenode-kubernetes-template
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

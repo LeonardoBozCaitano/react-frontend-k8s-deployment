@@ -1,4 +1,4 @@
-name: Docker image CI
+name: Build Docker image and deploy to k8s
 
 on:
   push:
@@ -12,14 +12,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: docker hub login
+      - name: DockerHub Login
         env:
           DOCKER_USER: ${{secrets.DOCKER_USER}}
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
-      - name: Build the docker image
+      - name: Building the image
         run: docker build . --tag ${{secrets.DOCKER_USER}}/react-frontend
 
-      - name: Push the docker image
+      - name: Push image to dockerhub
         run: docker push ${{secrets.DOCKER_USER}}/react-frontend
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Connect to k8s
+        run:
