@@ -9,7 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: DockerHub Login
@@ -24,3 +23,9 @@ jobs:
       - name: Push image to dockerhub
         run: docker push ${{secrets.DOCKER_USER}}/react-frontend
 
+      - name: deploy to cluster
+        uses: steebchen/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: helm install --values=chart-deploy/values.yaml chart-deploy --generate-name
